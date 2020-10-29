@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Candy : MonoBehaviour
@@ -56,9 +56,16 @@ public class Candy : MonoBehaviour
             }
             else
             {
-                Swap(previousSelected);
-                previousSelected.DeselectCandy();
-                // SelectCandy();
+                if (CanSwipe())
+                {
+                    Swap(previousSelected);
+                    previousSelected.DeselectCandy();
+                }
+                else
+                {
+                    previousSelected.DeselectCandy();
+                    SelectCandy();
+                }
             }
         }
     }
@@ -77,5 +84,32 @@ public class Candy : MonoBehaviour
         this.id = incomingCandy.id;
         incomingCandy.id = outGoingId;
 
+    }
+
+    private GameObject GetNeighbor(Vector2 direction)
+    {
+        RaycastHit2D hit = Physics2D.Raycast(this.transform.position,
+                                            direction);
+        if (hit.collider != null)
+        {
+            return hit.collider.gameObject;
+        }
+        else
+        {
+            return null;
+        }
+    }
+    private List<GameObject> GetAllNeighbors()
+    {
+        List<GameObject> neighbors = new List<GameObject>();
+        foreach (Vector2 direction in adjacentDirections)
+        {
+            neighbors.Add(GetNeighbor(direction));
+        }
+        return neighbors;
+    }
+    private bool CanSwipe()
+    {
+        return GetAllNeighbors().Contains(previousSelected.gameObject);
     }
 }
