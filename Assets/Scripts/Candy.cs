@@ -1,4 +1,3 @@
-﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -65,14 +64,14 @@ public class Candy : MonoBehaviour
     }
     public void Swap(Candy incomingCandy)
     {
-        if(this.id == incomingCandy.id)
+        if (this.id == incomingCandy.id)
             return;
 
         // Swap sprites
         Sprite outGoingSprite = this.spriteRenderer.sprite;
         this.spriteRenderer.sprite = incomingCandy.spriteRenderer.sprite;
         incomingCandy.spriteRenderer.sprite = outGoingSprite;
-        
+
         // Swap ids
         int outGoingId = this.id;
         this.id = incomingCandy.id;
