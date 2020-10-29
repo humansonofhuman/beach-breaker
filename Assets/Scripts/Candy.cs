@@ -24,13 +24,42 @@ public class Candy : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    void Start()
+    private void SelectCandy()
     {
-
+        isSelected = true;
+        spriteRenderer.color = selectedColor;
+        previousSelected = gameObject.GetComponent<Candy>();
     }
 
-    void Update()
+    private void DeselectCandy()
     {
+        isSelected = false;
+        spriteRenderer.color = Color.white;
+        previousSelected = null;
+    }
 
+    private void OnMouseDown()
+    {
+        if (spriteRenderer.sprite == null
+        || BoardManager.sharedInstance.isShifting)
+        {
+            return;
+        }
+        if (isSelected)
+        {
+            DeselectCandy();
+        }
+        else
+        {
+            if (previousSelected == null)
+            {
+                SelectCandy();
+            }
+            else
+            {
+                previousSelected.DeselectCandy();
+                // SelectCandy();
+            }
+        }
     }
 }

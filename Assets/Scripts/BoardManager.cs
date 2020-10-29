@@ -10,6 +10,7 @@ public class BoardManager : MonoBehaviour
     public int xSize, ySize;
 
     private GameObject[,] candies;
+    private Candy selectedCandy;
 
     public bool isShifting { get; set; }
 
