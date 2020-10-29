@@ -35,6 +35,8 @@ public class BoardManager : MonoBehaviour
         float startX = this.transform.position.x;
         float startY = this.transform.position.y;
 
+        int idx = -1;
+
         for (int x = 0; x < xSize; x++)
         {
             for (int y = 0; y < ySize; y++)
@@ -46,6 +48,17 @@ public class BoardManager : MonoBehaviour
                                                   position,
                                                   currentCandy.transform.rotation);
                 newCandy.name = $"Candy [{x}] [{y}]";
+
+                do
+                {
+                    idx = Random.Range(0, prefabs.Count);
+                } while (x > 0 && idx == candies[x - 1, y].GetComponent<Candy>().id
+                      || (y > 0 && idx == candies[x, y - 1].GetComponent<Candy>().id));
+
+                var sprite = prefabs[idx];
+                newCandy.GetComponent<SpriteRenderer>().sprite = sprite;
+                newCandy.GetComponent<Candy>().id = idx;
+                newCandy.transform.parent = transform;
                 candies[x, y] = newCandy;
             }
         }
