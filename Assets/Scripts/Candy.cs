@@ -112,4 +112,28 @@ public class Candy : MonoBehaviour
     {
         return GetAllNeighbors().Contains(previousSelected.gameObject);
     }
+
+    private List<GameObject> FindMatch(Vector2 direction)
+    {
+        List<GameObject> matches = new List<GameObject>();
+        // candy ---------------------->
+        RaycastHit2D hit = Physics2D.Raycast(this.transform.position, direction);
+        while (hit.collider != null &&
+               hit.collider.GetComponent<SpriteRenderer>().sprite == spriteRenderer.sprite)
+        {
+            matches.Add(hit.collider.gameObject);
+            hit = Physics2D.Raycast(hit.collider.transform.position, direction);
+        }
+
+        // <---------------------- candy
+        hit = Physics2D.Raycast(this.transform.position, -direction);
+        while (hit.collider != null &&
+               hit.collider.GetComponent<SpriteRenderer>().sprite == spriteRenderer.sprite)
+        {
+            matches.Add(hit.collider.gameObject);
+            hit = Physics2D.Raycast(hit.collider.transform.position, -direction);
+        }
+
+        return matches;
+    }
 }
