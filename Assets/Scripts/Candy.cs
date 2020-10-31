@@ -59,7 +59,11 @@ public class Candy : MonoBehaviour
                 if (CanSwipe())
                 {
                     Swap(previousSelected);
+                    // FindAllMatches is called two times because any of these candies
+                    // could result in a match after swapping
+                    previousSelected.FindAllMatches();
                     previousSelected.DeselectCandy();
+                    FindAllMatches();
                 }
                 else
                 {
@@ -116,24 +120,66 @@ public class Candy : MonoBehaviour
     private List<GameObject> FindMatch(Vector2 direction)
     {
         List<GameObject> matches = new List<GameObject>();
-        // candy ---------------------->
+
         RaycastHit2D hit = Physics2D.Raycast(this.transform.position, direction);
         while (hit.collider != null &&
-               hit.collider.GetComponent<SpriteRenderer>().sprite == spriteRenderer.sprite)
+               hit.collider.GetComponent<Candy>().id == this.id)
         {
             matches.Add(hit.collider.gameObject);
             hit = Physics2D.Raycast(hit.collider.transform.position, direction);
         }
 
-        // <---------------------- candy
-        hit = Physics2D.Raycast(this.transform.position, -direction);
-        while (hit.collider != null &&
-               hit.collider.GetComponent<SpriteRenderer>().sprite == spriteRenderer.sprite)
-        {
-            matches.Add(hit.collider.gameObject);
-            hit = Physics2D.Raycast(hit.collider.transform.position, -direction);
-        }
-
         return matches;
+    }
+
+    public void Clear()
+    {
+        this.spriteRenderer.sprite = null;
+        this.id = -1;
+    }
+
+    private bool ClearMatch(Vector2[] directions)
+    {
+        List<GameObject> matchingCandies = new List<GameObject>();
+
+        foreach (Vector2 direction in directions)
+        {
+            matchingCandies.AddRange(FindMatch(direction));
+        }
+        if (matchingCandies.Count >= BoardManager.MinCandiesToMatch)
+        {
+            foreach (GameObject candy in matchingCandies)
+            {
+                candy.GetComponent<Candy>().Clear();
+            }
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void FindAllMatches()
+    {
+        if (spriteRenderer.sprite == null)
+            return;
+
+        bool hMatch = ClearMatch(new Vector2[2]
+        {
+            Vector2.left,
+            Vector2.right
+        });
+
+        bool vMatch = ClearMatch(new Vector2[2]
+        {
+            Vector2.up,
+            Vector2.down
+        });
+
+        if (hMatch || vMatch)
+        {
+            this.Clear();
+        }
     }
 }
