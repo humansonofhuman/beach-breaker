@@ -701,6 +701,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 282471e197b7c3c449dcecf9f9cccf64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movesText: {fileID: 464596473}
+  scoreText: {fileID: 608925782}
 --- !u!4 &786262365
 Transform:
   m_ObjectHideFlags: 0
