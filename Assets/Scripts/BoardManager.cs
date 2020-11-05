@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -77,6 +77,14 @@ public class BoardManager : MonoBehaviour
                     yield return StartCoroutine(MakeCandiesFall(x, y));
                     break;
                 }
+            }
+        }
+
+        for (int x = 0; x < xSize; x++)
+        {
+            for (int y = 0; y < ySize; y++)
+            {
+                candies[x, y].GetComponent<Candy>().FindAllMatches();
             }
         }
     }
