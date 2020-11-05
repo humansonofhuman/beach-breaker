@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -104,10 +104,35 @@ public class BoardManager : MonoBehaviour
             for (int j = 0; j < fallingCandies.Count - 1; j++)
             {
                 fallingCandies[j].ChangeType(fallingCandies[j + 1]);
-                fallingCandies[j + 1].Clear();
+                var newCandy = GetNewCandy(x, ySize -1);
+                fallingCandies[j + 1].ChangeType(prefabs.IndexOf(newCandy), newCandy);
             }
         }
 
         isShifting = false;
+    }
+
+    private Sprite GetNewCandy(int x, int y)
+    {
+        List<Sprite> possibleCandies = new List<Sprite>();
+        possibleCandies.AddRange(prefabs);
+
+        if (x > 0) // IsntInFirstColumn
+        {
+            // Remove the one in the column before but in the same row
+            possibleCandies.Remove(candies[x - 1, y].GetComponent<SpriteRenderer>().sprite);
+        }
+        if (x < xSize - 1) // IsntInLastColumn
+        {
+            // Remove the candy in the next column in the same row
+            possibleCandies.Remove(candies[x + 1, y].GetComponent<SpriteRenderer>().sprite);
+        }
+        if (y > 0) // IsntInFirstRow
+        {
+            // Remove the candy in the same column in the previous row
+            possibleCandies.Remove(candies[x, y - 1].GetComponent<SpriteRenderer>().sprite);
+        }
+
+        return possibleCandies[Random.Range(0, possibleCandies.Count)];
     }
 }
