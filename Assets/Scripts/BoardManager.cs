@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -65,8 +66,48 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    void Update()
+    public IEnumerator FindCrushedCandies()
     {
+        for (int x = 0; x < xSize; x++)
+        {
+            for (int y = 0; y < ySize; y++)
+            {
+                if (candies[x, y].GetComponent<Candy>().id == -1)
+                {
+                    yield return StartCoroutine(MakeCandiesFall(x, y));
+                    break;
+                }
+            }
+        }
+    }
 
+    private IEnumerator MakeCandiesFall(int x, int yStart, float shiftDelay = 0.05f)
+    {
+        isShifting = true;
+
+        List<Candy> fallingCandies = new List<Candy>();
+        int nullCandies = 0;
+
+        for (int y = yStart; y < ySize; y++)
+        {
+            Candy candy = candies[x, y].GetComponent<Candy>();
+            if (candy.id == -1)
+            {
+                nullCandies++;
+            }
+            fallingCandies.Add(candy);
+        }
+
+        for (int i = 0; i < nullCandies; i++)
+        {
+            yield return new WaitForSeconds(shiftDelay);
+            for (int j = 0; j < fallingCandies.Count - 1; j++)
+            {
+                fallingCandies[j].ChangeType(fallingCandies[j + 1]);
+                fallingCandies[j + 1].Clear();
+            }
+        }
+
+        isShifting = false;
     }
 }

@@ -64,6 +64,9 @@ public class Candy : MonoBehaviour
                     previousSelected.FindAllMatches();
                     previousSelected.DeselectCandy();
                     FindAllMatches();
+
+                    StopCoroutine(BoardManager.sharedInstance.FindCrushedCandies());
+                    StartCoroutine(BoardManager.sharedInstance.FindCrushedCandies());
                 }
                 else
                 {
@@ -132,10 +135,20 @@ public class Candy : MonoBehaviour
         return matches;
     }
 
+    public void ChangeType(int id, Sprite sp)
+    {
+        this.id = id;
+        this.spriteRenderer.sprite = sp;
+    }
+    public void ChangeType(Candy candy)
+    {
+        var sprite = candy.gameObject.GetComponent<SpriteRenderer>().sprite;
+        ChangeType(candy.id, sprite);
+    }
+
     public void Clear()
     {
-        this.spriteRenderer.sprite = null;
-        this.id = -1;
+        ChangeType(-1, null);
     }
 
     private bool ClearMatch(Vector2[] directions)
