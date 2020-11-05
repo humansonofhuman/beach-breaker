@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -112,7 +112,7 @@ public class BoardManager : MonoBehaviour
             for (int j = 0; j < fallingCandies.Count - 1; j++)
             {
                 fallingCandies[j].ChangeType(fallingCandies[j + 1]);
-                var newCandy = GetNewCandy(x, ySize -1);
+                var newCandy = GetNewCandy(x, ySize - 1);
                 fallingCandies[j + 1].ChangeType(prefabs.IndexOf(newCandy), newCandy);
             }
         }
