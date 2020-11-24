@@ -192,8 +192,7 @@ public class Candy : MonoBehaviour
         if (hMatch || vMatch)
         {
             this.Clear();
-            StopCoroutine(BoardManager.sharedInstance.FindCrushedCandies());
-            StartCoroutine(BoardManager.sharedInstance.FindCrushedCandies());
+            BoardManager.sharedInstance.StartFindCrushedCandies();
         }
     }
 }

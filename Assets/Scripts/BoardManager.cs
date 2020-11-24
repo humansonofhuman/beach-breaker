@@ -9,6 +9,7 @@ public class BoardManager : MonoBehaviour
     public List<Sprite> prefabs = new List<Sprite>();
     public GameObject currentCandy;
     public int xSize, ySize;
+    private Coroutine findCrushedCandiesCoroutine;
 
     private GameObject[,] candies;
     private Candy selectedCandy;
@@ -86,6 +87,19 @@ public class BoardManager : MonoBehaviour
             {
                 candies[x, y].GetComponent<Candy>().FindAllMatches();
             }
+        }
+    }
+
+    public void StartFindCrushedCandies()
+    {
+        if (findCrushedCandiesCoroutine == null)
+        {
+            findCrushedCandiesCoroutine = StartCoroutine(FindCrushedCandies());
+        }
+        else
+        {
+            StopCoroutine(findCrushedCandiesCoroutine);
+            findCrushedCandiesCoroutine = StartCoroutine(FindCrushedCandies());
         }
     }
 
